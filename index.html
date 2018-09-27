@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/bootstrap.css"/>
+</head>
+<body>
+    <div id="app">
+        <h3>使用vue-router插件实现SPA应用</h3>
+        <router-view></router-view>
+
+    </div>
+</body>
+    <template id="tplLogin">
+        <div class="alert alert-success">
+            <h3>这是登陆页</h3>
+            <!--<a href="#/main">登陆1</a>-->
+            <router-link to="/main">登陆1</router-link>
+            <button @click="loginbtn">登陆2</button>
+        </div>
+    </template>
+<template id="tplMain">
+    <div class="alert alert-danger">
+        <h3>这是登陆页</h3>
+        <!--<a href="#/login">退出1</a>-->
+        <hr/>
+        <h5>商品列表</h5>
+        <ul>
+            <li><router-link to="/plist/101">Dell烯7000</router-link></li>
+            <li><router-link to="/plist/102">联想小新</router-link></li>
+            <li><router-link to="/plist/103">小米AIR</router-link></li>
+            <li><router-link to="/plist/104">外星人</router-link></li>
+        </ul>
+        <router-link to="/login">退出1</router-link>
+        <button @click="mainexit">退出2</button>
+    </div>
+</template>
+<template id="tplProducts">
+    <h3>商品的详情{{this.$route.params.pid}}</h3>
+</template>
+<template id="tplFound">
+    <h1 class="alert alert-danger">404错误，页面未找到</h1>
+</template>
+</html>
+<script src="js/axios.min.js"></script>
+<script src="js/vue.js"></script>
+<script src="js/vue-router.js"></script>
+
+<script>
+    var ComLogin={
+        template:'#tplLogin',
+        methods:{
+            loginbtn:function(){
+                //router.push('/main');
+                this.$router.push('/main');
+            }
+        }
+    };
+    var ComMain={
+        template:'#tplMain',
+        methods:{
+            mainexit:function(){
+                this.$router.push('/login')
+            }
+        }
+    };
+    var Products={
+        template:'#tplProducts',
+        mounted:function(){
+            console.log(this.$route.params.pid);
+        }
+    };
+    var NotFound={
+        template:'#tplFound'
+    };
+    //配置路由字典
+    var routes=[
+        {path:'/',component:ComLogin},
+        {path:'/login',component:ComLogin},
+        {path:'/main',component:ComMain},
+        {path:'/plist/:pid',component:Products},
+        {path:'*',component:NotFound}
+    ];
+    //定义路由（指路大爷）,封闭路由词典
+//    var router=new VueRouter({
+//        routes
+//    });
+    new Vue({
+
+        router:new VueRouter({
+            routes
+        })
+
+    }).$mount("#app");
+</script>
